@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import {Form,FormControl,FormDescription,FormField,FormItem,FormLabel,FormMessage,} from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import React from 'react'
-import { signUpValidation } from "@/lib/validation"
+import { SignUpValidation } from "@/lib/validation"
 import { z } from "zod"
 import Loader from "@/components/shared/Loader"
 import { createUserAccount } from "@/lib/appwrite/api"
@@ -21,12 +21,12 @@ const SignupForm = () => {
   const {checkAuthUser, isLoading: isUserLoading } = useUserContext();
   const navigate = useNavigate();
 
-  const {mutateAsync: createUserAccount, isLoading: isCreatingAccount} = useCreateUserAccount();
+  const {mutateAsync: createUserAccount, isPending: isCreatingAccount} = useCreateUserAccount();
 
-  const {mutateAsync: signInAccount, isLoading: isSigningIn} = useSignInAccount();
+  const {mutateAsync: signInAccount,  isPending: isSigningIn} = useSignInAccount();
     // 1. Define your form.
-  const form = useForm<z.infer<typeof signUpValidation>>({
-    resolver: zodResolver(signUpValidation),
+  const form = useForm<z.infer<typeof SignUpValidation>>({
+    resolver: zodResolver(SignUpValidation),
     defaultValues: {
       name: '',
       username: '',
@@ -40,7 +40,7 @@ const SignupForm = () => {
 
   
   // 2. Define a submit handler.
-  async function onSubmit(values: z.infer<typeof signUpValidation>) {
+  async function onSubmit(values: z.infer<typeof SignUpValidation>) {
     const newUser = await createUserAccount(values);
 
     if(!newUser) {
