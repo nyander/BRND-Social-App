@@ -73,7 +73,7 @@ export const useSavePost = () => {
 
   return useMutation({
      mutationFn: ({postId, userId}: {postId: string; userId:string}) => savePost(postId, userId),
-     onSuccess: (data) => {
+     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_RECENT_POSTS]
       })
@@ -92,7 +92,7 @@ export const useDeleteSavePost = () => {
 
   return useMutation({
      mutationFn: (savedRecordId: string) => deleteSavedPost(savedRecordId),
-     onSuccess: (data) => {
+     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_RECENT_POSTS]
       })
@@ -151,11 +151,12 @@ export const useGetPosts = () => {
     queryKey: [QUERY_KEYS.GET_INFINITE_POSTS],
     queryFn: getInfinitePosts,
     getNextPageParam: (lastPage) => {
-      if(lastPage && lastPage.documents.length === 0) return null;
-
-      const lastId = lastPage.documents[lastPage?.documents.length - 1].$id;
-
-      return lastId;
+       // Check if lastPage is defined and has documents
+       if (lastPage && lastPage.documents && lastPage.documents.length > 0) {
+        return lastPage.documents[lastPage.documents.length - 1].$id; // Assuming this returns a string
+      } else {
+        return null; // No more pages to load
+      }
     }
   })
 }
