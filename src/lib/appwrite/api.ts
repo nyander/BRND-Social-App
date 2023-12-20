@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ID, Query } from "appwrite";
 import { INewPost, INewUser, IUpdatePost } from "@/types";
 import { account, appwriteConfig, avatars, databases, storage } from "./config";
@@ -340,27 +341,27 @@ export async function deletePost(postId: string, imageId:string) {
 }
 
 
-export async function getInfinitePosts({pageParam} : {pageParam: string}) {
-    const queries: any[] = [Query.orderDesc("$updatedAt"), Query.limit(10)];
-
+export async function getInfinitePosts({ pageParam = '' }) {
+    const queries: any[] = [Query.orderDesc("$updatedAt"), Query.limit(9)];
+  
     if (pageParam) {
-        queries.push(Query.cursorAfter(pageParam));
+      queries.push(Query.cursorAfter(pageParam.toString()));
     }
-
+  
     try {
-        const posts = await databases.listDocuments(
-            appwriteConfig.databaseId,
-            appwriteConfig.postCollectionId,
-            queries
-        )
-
-        if(!posts) throw Error;
-
-        return posts;
+      const posts = await databases.listDocuments(
+        appwriteConfig.databaseId,
+        appwriteConfig.postCollectionId,
+        queries
+      );
+  
+      if (!posts) throw Error;
+  
+      return posts;
     } catch (error) {
-        console.log(error)
+      console.log(error);
     }
-}
+  }
 
 export async function searchPosts(searchTerm: string) {
     try {
