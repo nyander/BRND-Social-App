@@ -4,7 +4,7 @@ import SearchResults from '@/components/shared/SearchResults';
 import { Input } from '@/components/ui/input'
 import useDebounce from '@/hooks/useDebounce';
 import { useGetPosts, useSearchPost } from '@/lib/react-query/queriesAndMutations';
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useInView } from 'react-intersection-observer';
 
 const Explore = () => {
@@ -27,7 +27,7 @@ const Explore = () => {
   }
 
   const shouldShowSearchResults = searchValue !== '';
-  const shouldShowPost = !shouldShowSearchResults && posts.pages.every((item) => item.documents.length === 0)
+  const shouldShowPost = !shouldShowSearchResults && posts.pages.every((item) => item?.documents.length === 0)
 
   return (
     <div className='explore-container'>
@@ -55,7 +55,7 @@ const Explore = () => {
         ) : shouldShowPost ? (
           <p className='text-light-4 mt-10 text-center w-full'>End of Posts</p>
         ) : posts.pages.map((item, index) => (
-          <GridPostList key={`page-${index}`} posts={item.documents} />
+          <GridPostList key={`page-${index}`} posts={item?.documents} />
         ))}
       </div>
 
