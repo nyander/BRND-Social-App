@@ -149,13 +149,12 @@ export const useDeletePost = () => {
 export const useGetPosts = () => {
   return useInfiniteQuery({
     queryKey: [QUERY_KEYS.GET_INFINITE_POSTS],
-    queryFn: getInfinitePosts,
+    queryFn: ({ pageParam }) => getInfinitePosts({ pageParam }),
     getNextPageParam: (lastPage) => {
-       // Check if lastPage is defined and has documents
-       if (lastPage && lastPage.documents && lastPage.documents.length > 0) {
-        return lastPage.documents[lastPage.documents.length - 1].$id; // Assuming this returns a string
+      if (lastPage && lastPage.documents.length > 0) {
+        return lastPage.documents[lastPage.documents.length - 1].$id; // Ensure this is a string
       } else {
-        return null; // No more pages to load
+        return null;
       }
     }
   })
