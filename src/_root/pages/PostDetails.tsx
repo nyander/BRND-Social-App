@@ -9,12 +9,12 @@ import { Link, useParams } from 'react-router-dom';
 
 const PostDetails = () => {
   const {id} = useParams()
-  const {data: post , isPending} = useGetPostById(id || '');
+  const {data: post , isLoading} = useGetPostById(id || '');
   const {user} = useUserContext();
   const handleDeletePost = () => {}
   return (
     <div className='post_details-container'>
-      {isPending ? <Loader /> : (
+      {isLoading ? <Loader /> : (
         <div className='post_details-card'>
 
         <img src={post?.imageUrl} alt="post" className='post_details-img' />
