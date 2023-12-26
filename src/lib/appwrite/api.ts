@@ -379,3 +379,28 @@ export async function searchPosts(searchTerm: string) {
     }
   }
 
+export async function getUsers(limit?: number) {
+    try {
+        const queries = [Query.orderDesc("$createdAt")];
+
+        if (limit && limit > 0) {
+            queries.push(Query.limit(limit));
+        }
+
+        const users = await databases.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.userCollectionId,
+            queries
+        );
+
+        if (!users) {
+            throw new Error("Failed to retrieve users");
+        }
+
+        return users;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+
